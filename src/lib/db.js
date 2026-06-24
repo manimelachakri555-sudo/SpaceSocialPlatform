@@ -1,5 +1,7 @@
 // src/lib/db.js
-
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://spacesocialplatform.onrender.com";
 // Seed function
 export async function seedInitialDataIfEmpty() {
   return;
@@ -9,7 +11,7 @@ export async function seedInitialDataIfEmpty() {
 
 export async function fetchUserById(userId) {
   try {
-    const res = await fetch(`/api/users/${userId}`);
+    const res = await fetch(`${API_BASE_URL}/api/users/${userId}`);
 
     if (!res.ok) return null;
 
@@ -22,7 +24,7 @@ export async function fetchUserById(userId) {
 
 export async function createNewUserProfile(userId, profile) {
   try {
-    const res = await fetch("/api/users", {
+    const res = await fetch(`${API_BASE_URL}/api/users`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -50,8 +52,7 @@ export async function createNewUserProfile(userId, profile) {
 
 export async function fetchAllUsers() {
   try {
-    const res = await fetch("/api/users");
-
+   const res = await fetch(`${API_BASE_URL}/api/users`);
     if (!res.ok) return [];
 
     return await res.json();
@@ -70,7 +71,7 @@ export function subscribeToUsers(onNext) {
 
     try {
 
-      const res = await fetch("/api/users");
+      const res = await fetch(`${API_BASE_URL}/api/users`);
 
       if (!res.ok) return;
 
@@ -109,7 +110,7 @@ export function subscribeToPosts(onNext) {
 
     try {
 
-      const res = await fetch("/api/posts");
+     const res = await fetch(`${API_BASE_URL}/api/posts`);
 
       if (!res.ok) return;
 
@@ -142,7 +143,7 @@ export async function createPost(userId, content) {
 
   try {
 
-    const res = await fetch("/api/posts", {
+    const res = await fetch(`${API_BASE_URL}/api/posts`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -169,7 +170,7 @@ export async function togglePostLike(postId, userId) {
 
   try {
 
-    await fetch(`/api/posts/${postId}/like`, {
+    await fetch(`${API_BASE_URL}/api/posts/${postId}/like`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -188,7 +189,7 @@ export async function deletePost(postId) {
 
   try {
 
-    await fetch(`/api/posts/${postId}`, {
+    await fetch(`${API_BASE_URL}/api/posts/${postId}`,{
       method: "DELETE"
     });
 
@@ -207,7 +208,7 @@ export function subscribeToComments(postId, onNext) {
 
     try {
 
-      const res = await fetch(`/api/comments/${postId}`);
+      const res = await fetch(`${API_BASE_URL}/api/comments/${postId}`)
 
       if (!res.ok) return;
 
@@ -240,7 +241,7 @@ export async function addPostComment(postId, userId, content) {
 
   try {
 
-    const res = await fetch(`/api/posts/${postId}/comments`, {
+    const res = await fetch(`${API_BASE_URL}/api/posts/${postId}/comments`,{
       method: "POST",
       headers: {
         "Content-Type": "application/json"
@@ -273,7 +274,7 @@ export function subscribeToFollows(onNext) {
 
     try {
 
-      const res = await fetch("/api/users/follows");
+      const res = await fetch(`${API_BASE_URL}/api/users/follows`);
 
       if (!res.ok) return;
 
@@ -306,7 +307,7 @@ export async function toggleFollow(followerId, followingId) {
 
   try {
 
-    await fetch("/api/users/follow", {
+    await fetch(`${API_BASE_URL}/api/users/follow`,{
       method: "POST",
       headers: {
         "Content-Type": "application/json"
