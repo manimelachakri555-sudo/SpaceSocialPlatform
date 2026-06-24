@@ -71,31 +71,19 @@ const [userSearch, setUserSearch] = useState("");
 
   // 2. Load active identity session state (local/simulated switcher only, no Firebase auth)
 useEffect(() => {
-  if (isLoading) return;
-
-  console.log("isLoading =", isLoading);
-  console.log("users =", users);
-
-  if (users.length === 0) {
-    setIsAuthLoading(false);
-    return;
-  }
+  if (isLoading || users.length === 0) return;
 
   const savedActiveId = localStorage.getItem("social_active_user");
-
-  console.log("savedActiveId =", savedActiveId);
 
   const matched = users.find(
     (u) => String(u._id) === String(savedActiveId)
   );
 
-  console.log("matched =", matched);
-
   if (matched) {
     setCurrentUser(matched);
   } else {
-    setCurrentUser(users[0]);
-    localStorage.setItem("social_active_user", users[0]._id);
+    setCurrentUser(null);
+    setIsRegisteringOpen(true);
   }
 
   setIsAuthLoading(false);
@@ -107,7 +95,7 @@ useEffect(() => {
   };
 
   // Handle Google Sign Out
-  const handleGoogleLogout = () => {
+ const handleGoogleLogout = () => {
   localStorage.removeItem("social_active_user");
   setCurrentUser(null);
   setIsRegisteringOpen(true);
@@ -177,6 +165,7 @@ useEffect(() => {
   if (user) {
     setCurrentUser(user);
     localStorage.setItem("social_active_user", user._id);
+    setIsAuthLoading(false);
   }
 };
 
@@ -228,9 +217,7 @@ useEffect(() => {
   );
 }
 
-if (!currentUser && users.length > 0) {
-  setCurrentUser(users[0]);
-}
+
   // Current session statistics
   const myFollowers = follows.filter((f) => f.followingId === currentUser._id);
   const myFollowing = follows.filter((f) => f.followerId === currentUser._id);
