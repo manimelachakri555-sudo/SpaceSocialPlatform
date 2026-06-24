@@ -70,25 +70,25 @@ const [userSearch, setUserSearch] = useState("");
   }, []);
 
   // 2. Load active identity session state (local/simulated switcher only, no Firebase auth)
+const myFollowers = currentUser
+  ? follows.filter((f) => f.followingId === currentUser._id)
+  : [];
+
 useEffect(() => {
-  if (isLoading || users.length === 0) return;
+  if (!currentUser && users.length > 0) {
+    const savedId = localStorage.getItem("social_active_user");
 
-  const savedActiveId = localStorage.getItem("social_active_user");
+    const matched = users.find(
+      (u) => String(u._id) === String(savedId)
+    );
 
-  const matched = users.find(
-    (u) => String(u._id) === String(savedActiveId)
-  );
-
-  if (matched) {
-    setCurrentUser(matched);
-  } else {
-    setCurrentUser(null);
-    setIsRegisteringOpen(true);
+    if (matched) {
+      setCurrentUser(matched);
+    } else {
+      setCurrentUser(users[0]);
+    }
   }
-
-  setIsAuthLoading(false);
-
-}, [users, isLoading]);
+}, [users, currentUser]);
   // Handle Google Sign In (mocked elegantly to suggest profile creation)
   const handleGoogleLogin = () => {
     setIsRegisteringOpen(true);
@@ -204,7 +204,7 @@ useEffect(() => {
     (a, b) =>
       new Date(b.createdAt) - new Date(a.createdAt)
   );
- if (isLoading || isAuthLoading) {
+ if (isLoading || isAuthLoading || !currentUser) {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
       <div className="flex flex-col items-center gap-3">
@@ -219,9 +219,17 @@ useEffect(() => {
 
 
   // Current session statistics
-  const myFollowers = follows.filter((f) => f.followingId === currentUser._id);
-  const myFollowing = follows.filter((f) => f.followerId === currentUser._id);
-  const myPostsCount = posts.filter((p) => p.user=== currentUser._id).length;
+ const myFollowers = currentUser
+  ? follows.filter((f) => f.followingId === currentUser._id)
+  : [];
+
+const myFollowing = currentUser
+  ? follows.filter((f) => f.followerId === currentUser._id)
+  : [];
+
+const myPostsCount = currentUser
+  ? posts.filter((p) => p.user === currentUser._id).length
+  : 0;
 console.log("CURRENT USER:", currentUser?.username);
 console.log("SELECTED USER:", selectedUserId);
   return (
