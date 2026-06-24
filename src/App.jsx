@@ -70,9 +70,7 @@ const [userSearch, setUserSearch] = useState("");
   }, []);
 
   // 2. Load active identity session state (local/simulated switcher only, no Firebase auth)
-const myFollowers = currentUser
-  ? follows.filter((f) => f.followingId === currentUser._id)
-  : [];
+
 
 useEffect(() => {
   if (!currentUser && users.length > 0) {
@@ -87,6 +85,7 @@ useEffect(() => {
     } else {
       setCurrentUser(users[0]);
     }
+      setIsAuthLoading(false);
   }
 }, [users, currentUser]);
   // Handle Google Sign In (mocked elegantly to suggest profile creation)
