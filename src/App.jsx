@@ -32,6 +32,11 @@ export default function App() {
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [follows, setFollows] = useState([]);
+  useEffect(() => {
+  console.log("USERS:", users);
+  console.log("POSTS:", posts);
+  console.log("FOLLOWS:", follows);
+}, [users, posts, follows]);
   
   // High-fidelity profile modes
   const [currentUser, setCurrentUser] = useState(null);
@@ -65,26 +70,36 @@ const [userSearch, setUserSearch] = useState("");
   }, []);
 
   // 2. Load active identity session state (local/simulated switcher only, no Firebase auth)
-  useEffect(() => {
-  if (isLoading || users.length === 0) return;
+useEffect(() => {
+  if (isLoading) return;
+
+  console.log("isLoading =", isLoading);
+  console.log("users =", users);
+
+  if (users.length === 0) {
+    setIsAuthLoading(false);
+    return;
+  }
 
   const savedActiveId = localStorage.getItem("social_active_user");
 
-  if (savedActiveId) {
-    const matched = users.find(
-      (u) => String(u._id) === String(savedActiveId)
-    );
+  console.log("savedActiveId =", savedActiveId);
 
-    if (matched) {
-      setCurrentUser(matched);
-    } else {
-      setIsRegisteringOpen(true);
-    }
+  const matched = users.find(
+    (u) => String(u._id) === String(savedActiveId)
+  );
+
+  console.log("matched =", matched);
+
+  if (matched) {
+    setCurrentUser(matched);
   } else {
-    setIsRegisteringOpen(true);
+    setCurrentUser(users[0]);
+    localStorage.setItem("social_active_user", users[0]._id);
   }
 
   setIsAuthLoading(false);
+
 }, [users, isLoading]);
   // Handle Google Sign In (mocked elegantly to suggest profile creation)
   const handleGoogleLogin = () => {
@@ -200,19 +215,22 @@ const [userSearch, setUserSearch] = useState("");
     (a, b) =>
       new Date(b.createdAt) - new Date(a.createdAt)
   );
-  if (isLoading || isAuthLoading || !currentUser) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center font-sans">
-        <div className="flex flex-col items-center gap-3">
-          <div className="w-10 h-10 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin" />
-          <p className="text-xs font-bold text-slate-400 font-mono tracking-wide uppercase">
-            Synchronizing space persistence...
-          </p>
-        </div>
+ if (isLoading || isAuthLoading) {
+  return (
+    <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center gap-3">
+        <div className="w-10 h-10 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin" />
+        <p className="text-xs font-bold text-slate-400">
+          Synchronizing space persistence...
+        </p>
       </div>
-    );
-  }
+    </div>
+  );
+}
 
+if (!currentUser && users.length > 0) {
+  setCurrentUser(users[0]);
+}
   // Current session statistics
   const myFollowers = follows.filter((f) => f.followingId === currentUser._id);
   const myFollowing = follows.filter((f) => f.followerId === currentUser._id);
