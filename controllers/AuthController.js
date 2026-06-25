@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 import Auth from "../models/Auth.js";
-import User from "../models/User.js";
+import User from "../models/user.js";
 
 const JWT_SECRET = process.env.JWT_SECRET || "space_secret";
 
