@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
 {
+    authUserId:{
+type:mongoose.Schema.Types.ObjectId,
+ref:"Auth",
+required:false
+},
     username: {
         type: String,
         required: true

@@ -71,7 +71,14 @@ export function PostCard({
       <div className="flex items-start justify-between gap-3 mb-4">
         <div className="flex items-center gap-3">
           <button
-            onClick={() => onViewProfile(author._id)}
+            onClick={() => {
+  console.log("CLICKED");
+  console.log("author.username =", author.username);
+  console.log("author._id =", author._id);
+  console.log("post.user =", post.user);
+
+  onViewProfile(author._id);
+}}
             className="cursor-pointer transition-transform hover:scale-105 active:scale-95"
           >
             <Avatar username={author.username} avatarClass={author.avatar} size="md" />
@@ -79,7 +86,14 @@ export function PostCard({
           <div>
             <div className="flex items-center gap-1.5 flex-wrap">
               <button
-                onClick={() => onViewProfile(author._id)}
+                onClick={() => {
+  console.log("CLICKED");
+  console.log("author.username =", author.username);
+  console.log("author._id =", author._id);
+  console.log("post.user =", post.user);
+
+  onViewProfile(author._id);
+}}
                 className="font-sans font-bold text-slate-800 text-[15px] hover:underline hover:text-slate-900 cursor-pointer text-left"
               >
                 {author.username}
@@ -126,7 +140,11 @@ export function PostCard({
               }`}
             />
           </div>
-          <span>{post.likes ? post.likes.length : 0}</span>
+         <span>
+  {post.likesCount
+    ? `${(post.likesCount / 1000000).toFixed(1)}M`
+    : post.likes.length}
+</span>
         </button>
 
         <button
