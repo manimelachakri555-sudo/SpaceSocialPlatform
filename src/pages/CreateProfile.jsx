@@ -1,9 +1,22 @@
+import { useNavigate } from "react-router-dom";
+import { ProfileRegistration } from "../components/ProfileRegistration";
+
 export default function CreateProfile() {
+
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <h1 className="text-3xl font-bold">
-        Create Profile
-      </h1>
-    </div>
+    <ProfileRegistration
+
+      onClose={() => {
+        navigate("/login");
+      }}
+
+      onSuccess={() => {
+        navigate("/home");
+      }}
+
+    />
   );
+
 }

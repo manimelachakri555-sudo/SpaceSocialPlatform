@@ -14,7 +14,7 @@ export const getUsers = async (req, res) => {
 
 export const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params._id);
 
     if (!user) {
       return res.status(404).json({
@@ -32,7 +32,13 @@ export const getUserById = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
-    const { username, handle, avatar, bio } = req.body;
+    const {
+  authUserId,
+  username,
+  handle,
+  avatar,
+  bio,
+} = req.body;
 
     // Check if handle already exists
     const existingUser = await User.findOne({ handle });
@@ -44,11 +50,12 @@ export const createUser = async (req, res) => {
     }
 
     const user = await User.create({
-      username,
-      handle,
-      avatar: avatar || "",
-      bio: bio || ""
-    });
+  authUserId,
+  username,
+  handle,
+  avatar: avatar || "",
+  bio: bio || ""
+});
 
     res.status(201).json(user);
   } catch (error) {

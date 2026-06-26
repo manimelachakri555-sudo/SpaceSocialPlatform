@@ -30,11 +30,12 @@ export async function createNewUserProfile(userId, profile) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        username: profile.username,
-        handle: profile.handle,
-        avatar: profile.avatar,
-        bio: profile.bio
-      })
+  authUserId: userId,
+  username: profile.username,
+  handle: profile.handle,
+  avatar: profile.avatar,
+  bio: profile.bio
+})
     });
 
     if (!res.ok) {

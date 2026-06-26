@@ -40,11 +40,13 @@ export default function Signup() {
 
       if (data.token) {
 
-        localStorage.setItem("token", data.token);
+    localStorage.setItem("token", data.token);
 
-        navigate("/create-profile");
+    localStorage.setItem("authUserId", data.userId);
 
-      } else {
+    navigate("/create-profile");
+
+} else {
 
         alert(data.message || "Signup failed");
 

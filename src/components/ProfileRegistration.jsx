@@ -44,14 +44,13 @@ export function ProfileRegistration({ onClose, onSuccess }) {
         setIsSubmitting(false);
         return;
       }
-
-      const created = await createNewUserProfile(null, {
-        username: username.trim(),
-        handle: cleanHandle,
-        avatar: selectedGradient,
-        bio: bio.trim(),
-      });
-
+const authUserId = localStorage.getItem("authUserId");
+      const created = await createNewUserProfile(authUserId, {
+  username: username.trim(),
+  handle: cleanHandle,
+  avatar: selectedGradient,
+  bio: bio.trim(),
+});
       onSuccess(created._id);
     } catch (err) {
       setErrorMsg(err.message || "Server communication failure.");

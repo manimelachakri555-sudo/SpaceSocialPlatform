@@ -22,9 +22,23 @@ const [loading, setLoading] = useState(false);
       const data = await login(email, password);
 
       if (data.token) {
-        localStorage.setItem("token", data.token);
+
+    localStorage.setItem("token", data.token);
+
+    localStorage.setItem("authUserId", data.userId);
+
+    if (data.profileExists) {
+
         navigate("/home");
-      } else {
+
+    } else {
+
+        navigate("/create-profile");
+
+    }
+
+}
+      else {
         alert(data.message || "Login failed");
       }
     } catch (err) {

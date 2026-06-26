@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { useNavigate } from "react-router-dom";
 import {
   Users,
   PlusCircle,
@@ -29,6 +30,19 @@ import {
 } from "./lib/db";
 
 export default function App() {
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+
+  localStorage.removeItem("token");
+
+  localStorage.removeItem("authUserId");
+
+  setCurrentUser(null);
+
+  navigate("/login");
+
+};
   const [users, setUsers] = useState([]);
   const [posts, setPosts] = useState([]);
   const [follows, setFollows] = useState([]);
@@ -238,12 +252,7 @@ if (isLoading || isAuthLoading || !currentUser) {
           Synchronizing space persistence...
         </p>
 
-        <div className="text-xs text-red-500 mt-4 text-center">
-          <div>isLoading: {String(isLoading)}</div>
-          <div>isAuthLoading: {String(isAuthLoading)}</div>
-          <div>currentUser: {currentUser ? currentUser.username : "NULL"}</div>
-          <div>Users: {users.length}</div>
-        </div>
+        
       </div>
     </div>
   );
@@ -305,6 +314,15 @@ console.log("SELECTED USER:", selectedUserId);
             <PlusCircle size={14} />
             <span className="hidden sm:inline">New Profile</span>
           </button>
+          <button
+  onClick={handleLogout}
+  className="px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-red-600 hover:bg-red-700 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+>
+  <LogOut size={14} />
+  <span className="hidden sm:inline">
+    Logout
+  </span>
+</button>
         </div>
       </header>
 

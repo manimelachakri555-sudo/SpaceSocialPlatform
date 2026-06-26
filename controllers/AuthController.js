@@ -34,9 +34,9 @@ JWT_SECRET,
 );
 
 res.status(201).json({
-token
+    token,
+    userId: auth._id
 });
-
 }
 
 catch(err){
@@ -86,11 +86,10 @@ authUserId:auth._id
 });
 
 res.json({
-
-token,
-profileExists:!!profile,
-profile
-
+    token,
+    userId: auth._id,
+    profileExists: !!profile,
+    profile
 });
 
 }
