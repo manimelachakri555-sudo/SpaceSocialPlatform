@@ -3,7 +3,7 @@ import { Avatar } from "./Avatar";
 import { X, Calendar, FileText } from "lucide-react";
 import { PostCard } from "./PostCard";
 import { motion } from "motion/react";
-
+import EditProfileModal from "./EditProfileModal";
 export function ProfileSheet({
   userId,
   users,
@@ -17,6 +17,7 @@ export function ProfileSheet({
   onViewProfile,
 }) {
   const user = users.find((u) => u._id === userId);
+  const [showEdit, setShowEdit] = useState(false);
 
   if (!user) return null;
 
@@ -33,7 +34,20 @@ console.log(user._id);
     <div className="fixed inset-0 z-50 flex justify-end bg-slate-900/40 backdrop-blur-xs">
       {/* Backdrop clickable handler */}
       <div className="absolute inset-0" onClick={onClose} />
+{showEdit && (
+  <EditProfileModal
+    user={user}
+    onClose={() => setShowEdit(false)}
+    onUpdated={(updatedUser) => {
 
+      // Update current profile immediately
+      Object.assign(user, updatedUser);
+
+      setShowEdit(false);
+
+    }}
+  />
+)}
       {/* Slideout Panel */}
       <motion.div
         initial={{ x: "100%" }}
@@ -59,22 +73,29 @@ console.log(user._id);
           <div className="flex justify-between items-end gap-3 mb-3">
             <Avatar username={user.username} avatarClass={user.avatar} size="xl" />
 
-            {user._id!== currentUser._id ? (
-              <button
-                onClick={() => onFollowToggle(user._id)}
-                className={`px-4.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all active:scale-95 ${
-                  isFollowedByMe
-                    ? "border border-slate-200 text-slate-600 bg-white hover:bg-slate-50"
-                    : "bg-slate-900 text-white hover:bg-slate-800"
-                }`}
-              >
-                {isFollowedByMe ? "Unfollow" : "Follow"}
-              </button>
-            ) : (
-              <div className="px-3 py-1 rounded-full border border-indigo-150 bg-indigo-50 text-indigo-600 font-mono text-[10px] uppercase font-bold">
-                You
-              </div>
-            )}
+           {user._id !== currentUser._id ? (
+
+  <button
+    onClick={() => onFollowToggle(user._id)}
+    className={`px-4.5 py-1.5 rounded-xl text-xs font-semibold cursor-pointer transition-all active:scale-95 ${
+      isFollowedByMe
+        ? "border border-slate-200 text-slate-600 bg-white hover:bg-slate-50"
+        : "bg-slate-900 text-white hover:bg-slate-800"
+    }`}
+  >
+    {isFollowedByMe ? "Unfollow" : "Follow"}
+  </button>
+
+) : (
+
+  <button
+    onClick={() => setShowEdit(true)}
+    className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all"
+  >
+    Edit Profile
+  </button>
+
+)}
           </div>
 
           <div>

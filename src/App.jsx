@@ -5,6 +5,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import CreateProfile from "./pages/CreateProfile";
 import Home from "./Home";
+import Profile from "./pages/Profile";
 import ProtectedRoute from "./components/ProtectedRoute";
 export default function App() {
   return (

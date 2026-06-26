@@ -78,6 +78,52 @@ export const createUser = async (req, res) => {
 
   }
 };
+export const updateUser = async (req, res) => {
+  try {
+
+    const { username, handle, bio, avatar } = req.body;
+
+    // Check if another user already uses this handle
+    const existingUser = await User.findOne({
+      handle,
+      _id: { $ne: req.params.id }
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        error: "Handle already exists"
+      });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        username,
+        handle,
+        bio,
+        avatar
+      },
+      {
+        new: true
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "User not found"
+      });
+    }
+
+    res.json(updatedUser);
+
+  } catch (error) {
+
+    res.status(500).json({
+      message: error.message
+    });
+
+  }
+};
 
 export const getFollows = async (req, res) => {
   try {

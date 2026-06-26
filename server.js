@@ -13,7 +13,7 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
+console.log("🚀 NEW SERVER STARTED");
 app.use(express.json());
 app.use(cors());
 

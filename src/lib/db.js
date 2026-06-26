@@ -1,7 +1,7 @@
 // src/lib/db.js
-const API_BASE_URL =
-  import.meta.env.VITE_API_URL ||
-  "https://spacesocialplatform.onrender.com";
+const API_BASE_URL = "http://localhost:5001";
+
+console.log("API BASE URL:", API_BASE_URL);
 // Seed function
 export async function seedInitialDataIfEmpty() {
   return;
@@ -322,4 +322,29 @@ export async function toggleFollow(followerId, followingId) {
   } catch (error) {
     console.error("toggleFollow error:", error);
   }
+}
+export async function updateUserProfile(userId, profile) {
+
+  const url = `${API_BASE_URL}/api/users/${userId}`;
+console.log("Calling:", url);
+
+const res = await fetch(url, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(profile)
+  });
+
+  console.log("Status =", res.status);
+
+  const text = await res.text();
+
+  console.log("Response =", text);
+
+  if (!res.ok) {
+    throw new Error(text);
+  }
+
+  return JSON.parse(text);
 }
