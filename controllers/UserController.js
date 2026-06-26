@@ -12,6 +12,7 @@ export const getUsers = async (req, res) => {
   }
 };
 
+
 export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params._id);
@@ -32,13 +33,19 @@ export const getUserById = async (req, res) => {
 
 export const createUser = async (req, res) => {
   try {
+
+    console.log("========== CREATE USER ==========");
+    console.log("BODY =", req.body);
+
     const {
-  authUserId,
-  username,
-  handle,
-  avatar,
-  bio,
-} = req.body;
+      authUserId,
+      username,
+      handle,
+      avatar,
+      bio,
+    } = req.body;
+
+    console.log("authUserId =", authUserId);
 
     // Check if handle already exists
     const existingUser = await User.findOne({ handle });
@@ -50,18 +57,25 @@ export const createUser = async (req, res) => {
     }
 
     const user = await User.create({
-  authUserId,
-  username,
-  handle,
-  avatar: avatar || "",
-  bio: bio || ""
-});
+      authUserId,
+      username,
+      handle,
+      avatar: avatar || "",
+      bio: bio || ""
+    });
+
+    console.log("USER CREATED =", user);
 
     res.status(201).json(user);
+
   } catch (error) {
+
+    console.log("CREATE USER ERROR =", error);
+
     res.status(500).json({
       message: error.message
     });
+
   }
 };
 

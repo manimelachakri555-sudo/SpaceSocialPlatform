@@ -53,7 +53,7 @@ const handleLogout = () => {
 }, [users, posts, follows]);
   
   // High-fidelity profile modes
-  const [currentUser, setCurrentUser] = useState(null);
+ const [ currentUser, setCurrentUser] = useState(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [activeTab, setActiveTab] = useState("global");
@@ -93,25 +93,16 @@ useEffect(() => {
     return;
   }
 
-  const savedId = localStorage.getItem("social_active_user");
+  const authUserId = localStorage.getItem("authUserId");
 
   const matched = users.find(
-    (u) => String(u._id) === String(savedId)
+    (u) => String(u.authUserId) === String(authUserId)
   );
 
   if (matched) {
     setCurrentUser(matched);
   } else {
-    // Old session doesn't exist anymore
-    localStorage.removeItem("social_active_user");
-
-    // Select first user temporarily
-    setCurrentUser(users[0]);
-
-    localStorage.setItem(
-      "social_active_user",
-      users[0]._id
-    );
+    setCurrentUser(null);
   }
 
   setIsAuthLoading(false);
@@ -126,11 +117,9 @@ useEffect(() => {
   };
 
   // Handle Google Sign Out
- const handleGoogleLogout = () => {
-  localStorage.removeItem("social_active_user");
-  setCurrentUser(null);
-  setIsRegisteringOpen(true);
-};
+ 
+
+
 
   // Set simulated acting user state and persist
   
