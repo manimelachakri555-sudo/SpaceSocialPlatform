@@ -1,6 +1,7 @@
 // src/lib/db.js
-const API_BASE_URL = "http://localhost:5001";
-
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  "https://spacesocialplatform.onrender.com";
 console.log("API BASE URL:", API_BASE_URL);
 // Seed function
 export async function seedInitialDataIfEmpty() {
